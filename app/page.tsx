@@ -254,9 +254,7 @@ export default function Home() {
   return (
     <div className="h-screen flex flex-col md:flex-row overflow-hidden bg-gray-50 text-slate-900">
       
-      {/* 手機版標籤切換按鈕 
-         (只在手機上顯示，固定在底部)
-      */}
+      {/* 手機版標籤切換按鈕 */}
       <div className="md:hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white rounded-full shadow-lg p-1 flex gap-1">
         <button 
           onClick={() => setMobileTab('settings')}
@@ -273,30 +271,33 @@ export default function Home() {
         </button>
       </div>
 
-      {/* 左側設定區 */}
+      {/* 左側設定區 - 修正重點：h-full + overflow-y-auto */}
       <div className={`
-        w-full md:w-[30%] md:min-w-[320px] border-r bg-white flex flex-col
+        w-full md:w-[30%] md:min-w-[320px] border-r bg-white flex flex-col h-full
         ${mobileTab === 'settings' ? 'flex' : 'hidden md:flex'} 
       `}>
-        <SettingsPanel
-          participants={characters}
-          topic={topic}
-          rounds={rounds}
-          subTopics={subTopics}
-          isRunning={isLoading}
-          onAddCharacter={handleAddCharacter}
-          onRemoveCharacter={handleRemoveCharacter}
-          onUpdateCharacter={handleUpdateCharacter}
-          onTopicChange={setTopic}
-          onRoundsChange={setRounds}
-          onSubTopicsChange={setSubTopics}
-          onStart={handleStart}
-        />
+        {/* 包裹一層可捲動的容器，並增加底部 padding 防止被按鈕擋住 */}
+        <div className="flex-1 overflow-y-auto pb-24 md:pb-0">
+          <SettingsPanel
+            participants={characters}
+            topic={topic}
+            rounds={rounds}
+            subTopics={subTopics}
+            isRunning={isLoading}
+            onAddCharacter={handleAddCharacter}
+            onRemoveCharacter={handleRemoveCharacter}
+            onUpdateCharacter={handleUpdateCharacter}
+            onTopicChange={setTopic}
+            onRoundsChange={setRounds}
+            onSubTopicsChange={setSubTopics}
+            onStart={handleStart}
+          />
+        </div>
       </div>
 
       {/* 右側結果區 */}
       <div className={`
-        flex-1 flex flex-col bg-slate-50 relative
+        flex-1 flex flex-col bg-slate-50 relative h-full
         ${mobileTab === 'results' ? 'flex' : 'hidden md:flex'}
       `}>
         <ResultsPanel
